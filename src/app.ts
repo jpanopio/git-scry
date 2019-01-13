@@ -1,9 +1,12 @@
-const config = require('config');
-const express = require('express');
+import config from 'config';
+import express from 'express';
+import bodyParser from 'body-parser';
 
-const PORT = config.get('port');
 const app = express();
+
+app.set('port', config.get('port'));
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
-app.listen(PORT, () => console.log(`App listening on ${PORT}`));
+export default app;
