@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "start": "node dist/server.js",
     "build": "npm run build-ts",
     "build-ts": "tsc",
     "test": "jest",
     "debug": "npm run build && npm run watch-debug",
     "watch-node": "nodemon dist/server.js",
     "watch-ts": "tsc -w",
-    "watch-debug": "concurrently -k -p \"{name} - \" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\""
+    "serve-debug": "nodemon --inspect dist/server.js",
+    "watch-debug": "concurrently -k -p \"{name} - \" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
   },
   "repository": {
     "type": "git",
@@ -24,7 +26,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "config": "^3.0.1",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "node-fetch": "^2.3.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",
