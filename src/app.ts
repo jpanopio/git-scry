@@ -17,6 +17,7 @@ app.use(
 
 app.use(
   session({
+    name: 'id',
     secret: APP_SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
