@@ -1,6 +1,8 @@
 import config from 'config';
 import express from 'express';
+import session from 'express-session';
 import bodyParser from 'body-parser';
+import { APP_SESSION_SECRET } from './constants/env';
 import router from './router';
 import logger from './logger';
 
@@ -11,6 +13,14 @@ app.use(
     logger.info(`${method}: ${originalUrl}`);
     next();
   }
+);
+
+app.use(
+  session({
+    secret: APP_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
 );
 
 app.set('port', config.get('port'));
