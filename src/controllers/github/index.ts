@@ -9,7 +9,7 @@ export const loginRedirect = (_: Request, res: Response) => {
   res.redirect(`${GITHUB_LOGIN_REDIRECT}?client_id=${GITHUB_CLIENT_ID}`);
 };
 
-export const getAccessToken = async (req: Request) => {
+export const getAccessToken = async (req: Request, res: Response) => {
   try {
     const { query } = req;
     const codeForAccessToken: String = query.code;
@@ -45,8 +45,13 @@ export const getAccessToken = async (req: Request) => {
 
     logger.info('Received access token');
 
-    return accessToken;
+    req.session.githubAccessToken = accessToken;
+    res.redirect('/');
   } catch (err) {
-    logger.error(err.message || 'Unable to retrieve access token');
+    const errorMessage = err.message || 'Unable to retrieve access token';
+
+    logger.error(errorMessage);
+
+    res.status(500).send({ error: errorMessage });
   }
 };

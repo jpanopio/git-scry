@@ -7,12 +7,14 @@ import logger from './logger';
 const redisClient = redis.createClient();
 const RedisStore = connectRedis(session);
 
+redisClient.on('ready', () => logger.info('Redis client connection established'));
+
 redisClient.on('error', (err) => {
-  logger.error(`Redis Client Error - ${err}`);
+  logger.error(`Redis client error - ${err}`);
 });
 
 export default session({
-  name: 'id',
+  name: 'scry-id',
   store: new RedisStore({
     client: redisClient,
   }),
