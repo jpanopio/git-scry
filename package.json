@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/jpanopio/git-scry#readme",
   "dependencies": {
+    "@types/connect-redis": "0.0.8",
     "body-parser": "^1.18.3",
     "config": "^3.0.1",
     "connect-redis": "^3.4.0",

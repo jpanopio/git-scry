@@ -1,10 +1,9 @@
 import config from 'config';
 import express from 'express';
-import session from 'express-session';
 import bodyParser from 'body-parser';
-import { APP_SESSION_SECRET } from './constants/env';
 import router from './router';
 import logger from './logger';
+import appSession from './appSession';
 
 const app = express();
 
@@ -15,16 +14,8 @@ app.use(
   }
 );
 
-app.use(
-  session({
-    name: 'id',
-    secret: APP_SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 app.set('port', config.get('port'));
+app.use(appSession);
 app.use(bodyParser.json());
 app.use('/', router);
 
