@@ -3,6 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import router from './router';
 import logger from './logger';
+import appSession from './appSession';
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(
 );
 
 app.set('port', config.get('port'));
+app.use(appSession);
 app.use(bodyParser.json());
 app.use('/', router);
 
