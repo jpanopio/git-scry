@@ -44,7 +44,8 @@ export const getAccessToken = async (req: Request, res: Response) => {
     );
 
     const result = await response.json();
-    const accessToken: String = result.access_token;
+    const accessToken: string = result.access_token;
+    const appScope: string = result.scope;
 
     if (!accessToken) {
       throw new Error('Empty access token returned from GitHub');
@@ -53,6 +54,11 @@ export const getAccessToken = async (req: Request, res: Response) => {
     logger.info('Received access token');
 
     req.session.githubAccessToken = accessToken;
+    req.session.gitScry = {
+      githubAccessToken: accessToken,
+      appScope,
+    };
+
     res.redirect('/');
   } catch (err) {
     const errorMessage = err.message || 'Unable to retrieve access token';
