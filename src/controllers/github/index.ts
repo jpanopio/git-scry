@@ -3,7 +3,11 @@ import { Request, Response } from 'express';
 import qs from 'qs';
 import logger from '../../logger';
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '../../constants/env';
-import { GITHUB_LOGIN_REDIRECT, GITHUB_ACCESS_TOKEN } from '../../constants/endpoints';
+import {
+  GITHUB_LOGIN_REDIRECT,
+  GITHUB_ACCESS_TOKEN,
+  GITHUB_ORGANIZATIONS,
+} from '../../constants/endpoints';
 
 export const loginRedirect = (_: Request, res: Response) => {
   logger.info('Redirecting to GitHub login');
