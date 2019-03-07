@@ -72,3 +72,35 @@ export const getAccessToken = async (req: Request, res: Response) => {
     res.status(500).send({ error: errorMessage });
   }
 };
+
+export const getPullRequests = async (req: Request, res: Response) => {
+  try {
+    const gitScry = req.session.gitScry;
+
+    if (!gitScry) {
+      throw new Error('Session expired');
+    }
+
+    const githubAccessToken: string = gitScry.githubAccessToken;
+    const params = qs.stringify({ access_token: githubAccessToken });
+    const response = await fetch(`${GITHUB_ORGANIZATIONS}?${params}`);
+    const result = await response.json();
+    const testResult = result[0];
+
+    console.log('orgs?', result[0]);
+
+    const repoUrl: string = testResult.repos_url;
+    const repoResponse = await fetch(repoUrl);
+    const repoJson = await repoResponse.json();
+
+    console.log('repo JSON?', repoJson);
+
+    res.send('YAY');
+  } catch (err) {
+    const errorMessage = err.message || 'Unable to retrieve pull request info';
+
+    logger.error(errorMessage);
+
+    res.status(500).send({ error: errorMessage });
+  }
+};
