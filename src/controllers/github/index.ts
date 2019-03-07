@@ -1,12 +1,19 @@
 import fetch from 'node-fetch';
 import { Request, Response } from 'express';
+import qs from 'qs';
 import logger from '../../logger';
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '../../constants/env';
 import { GITHUB_LOGIN_REDIRECT, GITHUB_ACCESS_TOKEN } from '../../constants/endpoints';
 
 export const loginRedirect = (_: Request, res: Response) => {
   logger.info('Redirecting to GitHub login');
-  res.redirect(`${GITHUB_LOGIN_REDIRECT}?client_id=${GITHUB_CLIENT_ID}`);
+
+  const params = qs.stringify({
+    client_id: GITHUB_CLIENT_ID,
+    scope: 'user:email,read:org',
+  });
+
+  res.redirect(`${GITHUB_LOGIN_REDIRECT}?${params}`);
 };
 
 export const getAccessToken = async (req: Request, res: Response) => {
