@@ -104,3 +104,36 @@ export const getPullRequests = async (req: Request, res: Response) => {
     res.status(500).send({ error: errorMessage });
   }
 };
+
+export const getOrganizations = async (req: Request, res: Response) => {
+  try {
+    const gitScry = req.session.gitScry;
+
+    if (!gitScry) {
+      throw new Error('Session expired');
+    }
+
+    const githubAccessToken: string = gitScry.githubAccessToken;
+    const params = qs.stringify({ access_token: githubAccessToken });
+    const response = await fetch(`${GITHUB_ORGANIZATIONS}?${params}`);
+    const result = await response.json();
+
+    const r = result.map(function (org) {
+      return {
+        "id": org.id,
+        "login": org.login,
+        "avatar_url": org.avatar_url,
+        "description": org.description,
+      }
+    });
+
+    res.send(r);
+
+  } catch (err) {
+    const errorMessage = err.message || 'Unable to retrieve organizations';
+
+    logger.error(errorMessage);
+
+    res.status(500).send({ error: errorMessage });
+  }
+};
