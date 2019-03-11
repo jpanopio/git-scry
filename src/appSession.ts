@@ -8,10 +8,7 @@ const redisClient = redis.createClient();
 const RedisStore = connectRedis(session);
 
 redisClient.on('ready', () => logger.info('Redis client connection established'));
-
-redisClient.on('error', (err) => {
-  logger.error(`Redis client error - ${err}`);
-});
+redisClient.on('error', (err) => logger.error(`Redis client error - ${err}`));
 
 export default session({
   name: 'scry-id',
