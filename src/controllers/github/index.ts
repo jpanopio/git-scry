@@ -20,6 +20,14 @@ export const loginRedirect = (_: Request, res: Response) => {
   res.redirect(`${GITHUB_LOGIN_REDIRECT}?${params}`);
 };
 
+export const getSessionStatus = (req: Request, res: Response) => {
+  const gitScry = req.session.gitScry;
+
+  res.send({
+    "loggedIn": gitScry != null,
+  });
+};
+
 export const getAccessToken = async (req: Request, res: Response) => {
   try {
     const { query } = req;
