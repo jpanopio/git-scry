@@ -9,7 +9,11 @@ import {
   GITHUB_ORGANIZATIONS,
 } from '../../constants/endpoints';
 
-export const loginRedirect = (_: Request, res: Response) => {
+export const loginRedirect = (req: Request, res: Response) => {
+  const { query } = req;
+
+  req.session.gitScry = { redirect: query.redirect };
+
   logger.info('Redirecting to GitHub login');
 
   const params = qs.stringify({
@@ -65,13 +69,12 @@ export const getAccessToken = async (req: Request, res: Response) => {
 
     logger.info('Received access token');
 
-    req.session.githubAccessToken = accessToken;
-    req.session.gitScry = {
-      githubAccessToken: accessToken,
-      appScope,
-    };
+    req.session.gitScry.githubAccessToken = accessToken;
+    req.session.gitScry.appScope = appScope;
 
-    res.redirect('/');
+    const uiRedirect = req.session.gitScry.redirect;
+
+    res.redirect(uiRedirect);
   } catch (err) {
     const errorMessage = err.message || 'Unable to retrieve access token';
 
