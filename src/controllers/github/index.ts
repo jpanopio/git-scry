@@ -8,6 +8,7 @@ import {
   GITHUB_ACCESS_TOKEN,
   GITHUB_ORGANIZATIONS,
   GITHUB_USER,
+  GITHUB_SEARCH_PR,
 } from '../../constants/endpoints';
 
 export const loginRedirect = (req: Request, res: Response) => {
@@ -92,22 +93,24 @@ export const getPullRequests = async (req: Request, res: Response) => {
     if (!gitScry) {
       throw new Error('Session expired');
     }
-
     const githubAccessToken: string = gitScry.githubAccessToken;
     const params = qs.stringify({ access_token: githubAccessToken });
-    const response = await fetch(`${GITHUB_ORGANIZATIONS}?${params}`);
-    const result = await response.json();
-    const testResult = result[0];
 
-    console.log('orgs?', result[0]);
+    const user_response = await fetch(`${GITHUB_USER}?${params}`);
+    const user = await user_response.json();
+    console.log('user?', user);
 
-    const repoUrl: string = testResult.repos_url;
-    const repoResponse = await fetch(repoUrl);
-    const repoJson = await repoResponse.json();
+    const org_response = await fetch(`${GITHUB_ORGANIZATIONS}?${params}`);
+    const orgs = await org_response.json();
+    const org = orgs[0];
+    console.log('orgs?', orgs[0]);
 
-    console.log('repo JSON?', repoJson);
+    const query = `org:${org.login}+is:pr+author:${user.login}+created:>=2019-01-01`;
+    const url = `${GITHUB_SEARCH_PR}?${params}&q=${query}`;
+    const pr_response = await fetch(url);
+    const prs = await pr_response.json();
 
-    res.send('YAY');
+    res.send(prs);
   } catch (err) {
     const errorMessage = err.message || 'Unable to retrieve pull request info';
 
