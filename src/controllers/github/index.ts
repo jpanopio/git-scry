@@ -18,7 +18,7 @@ export const loginRedirect = (req: Request, res: Response) => {
 
   const params = qs.stringify({
     client_id: GITHUB_CLIENT_ID,
-    scope: 'user:email,read:org',
+    scope: 'user:email,read:org,repo',
   });
 
   res.redirect(`${GITHUB_LOGIN_REDIRECT}?${params}`);
