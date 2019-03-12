@@ -93,19 +93,13 @@ export const getPullRequests = async (req: Request, res: Response) => {
     if (!gitScry) {
       throw new Error('Session expired');
     }
+
     const githubAccessToken: string = gitScry.githubAccessToken;
     const params = qs.stringify({ access_token: githubAccessToken });
-
     const user_response = await fetch(`${GITHUB_USER}?${params}`);
     const user = await user_response.json();
-    console.log('user?', user);
-
-    const org_response = await fetch(`${GITHUB_ORGANIZATIONS}?${params}`);
-    const orgs = await org_response.json();
-    const org = orgs[0];
-    console.log('orgs?', orgs[0]);
-
-    const query = `org:${org.login}+is:pr+author:${user.login}+created:>=2019-01-01`;
+    const orgName = req.query.orgName;
+    const query = `org:${orgName}+is:pr+author:${user.login}+created:>=2019-01-01`;
     const url = `${GITHUB_SEARCH_PR}?${params}&q=${query}`;
     const pr_response = await fetch(url);
     const prs = await pr_response.json();
