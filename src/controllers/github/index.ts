@@ -152,3 +152,27 @@ export const getOrganizations = async (req: Request, res: Response) => {
     res.status(500).send({ error: errorMessage });
   }
 };
+
+export const getUserInfo = async (req: Request, res: Response) => {
+  try {
+    const gitScry = req.session.gitScry;
+
+    if (!gitScry) {
+      throw new Error('Session expired');
+    }
+
+    const githubAccessToken: string = gitScry.githubAccessToken;
+    const params = qs.stringify({ access_token: githubAccessToken });
+    const response = await fetch(`${GITHUB_USER}?${params}`);
+    const result = await response.json();
+
+    res.send(result);
+
+  } catch (err) {
+    const errorMessage = err.message || 'Unable to retrieve user info';
+
+    logger.error(errorMessage);
+
+    res.status(500).send({ error: errorMessage });
+  }
+};

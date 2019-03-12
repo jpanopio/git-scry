@@ -6,6 +6,7 @@ import {
   getPullRequests,
   getOrganizations,
   getSessionStatus,
+  getUserInfo
 } from './controllers/github';
 
 const router = Router();
@@ -22,5 +23,6 @@ router.get('/github-login-check', getSessionStatus);
 router.get('/github-code', getAccessToken);
 router.get('/github-pull-requests', getPullRequests);
 router.get('/github-organizations', getOrganizations);
+router.get('/github-user-info', getUserInfo);
 
 export default router;
