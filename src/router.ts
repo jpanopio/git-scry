@@ -8,6 +8,7 @@ import {
   getSessionStatus,
   getUserInfo
 } from './controllers/github';
+import { exportPullRequests } from './controllers/formatter';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.get('/github-code', getAccessToken);
 router.get('/github-pull-requests', getPullRequests);
 router.get('/github-organizations', getOrganizations);
 router.get('/github-user-info', getUserInfo);
+router.post('/formatter-export-pull-requests', exportPullRequests);
 
 export default router;
